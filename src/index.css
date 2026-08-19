@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+/* Exported content JSON is not source code — without this, Tailwind's auto-detection
+   extracts junk "classes" from the strings and bloats the stylesheet. */
+@source not "../public";

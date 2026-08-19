@@ -40,7 +40,7 @@ The split is cheap because the backend is already client-agnostic: coach logic i
 | Layer | Choice |
 |---|---|
 | Build | Vite + React 19 + TypeScript |
-| Routing | **React Router 8** (data mode) — mature and boring; not TanStack Router. Neither sibling uses it, so the major is a free choice: start on the current one |
+| Routing | **React Router 7** (data mode) — mature and boring; not TanStack Router. v8 is blocked (decided 2026-08-19): every 8.x declares `peer react >=19.2.7`, unsatisfiable while Expo SDK 57 pins react `19.2.3` (see Toolchain). Bump to the current major the moment the app's react passes 19.2.7 — the data-mode API is compatible, so it should be a version-bump-only change |
 | Styling | Tailwind 4 via `@tailwindcss/postcss` — same setup as `drivingo-website`, bundler-agnostic, config copies across |
 | Backend access | **Firebase JS SDK** — auth, firestore, functions. Never `@react-native-firebase` |
 | Region | Callables pinned to **`europe-west2`** — set it explicitly or every call 404s |
@@ -68,7 +68,7 @@ Copy `drivingo-app/biome.json` and adjust only the `files.includes` ignores (dro
 
 **Only four packages are shared** between the two repos: `react`, `@types/react`, `typescript`, `@biomejs/biome`. Everything else is platform-specific and independently versioned — `expo`/`react-native` exist only in the app, `vite`/`react-router`/`tailwind`/`firebase` only here, and the two use different Firebase packages entirely.
 
-For those four, **`drivingo-app` is the source of truth** and its `CLAUDE.md` holds the canonical table. The app governs because **Expo SDK constrains React and React Native** — the webapp must never force a version Expo doesn't support. Upgrading any of the four is an app-and-webapp-together decision, driven by what the Expo SDK allows. React Router is exempt: no sibling uses it, so take the current major.
+For those four, **`drivingo-app` is the source of truth** and its `CLAUDE.md` holds the canonical table. The app governs because **Expo SDK constrains React and React Native** — the webapp must never force a version Expo doesn't support. Upgrading any of the four is an app-and-webapp-together decision, driven by what the Expo SDK allows. React Router is not one of the four, but it is still transitively Expo-constrained: its peer range on `react` must be satisfiable by the table's react pin (this is what blocks v8 today — see the stack table's Routing row).
 
 ⚠️ If the scaffolding thread already installed ESLint + TS 5 from the previous version of this file, switch it now. Redoing lint setup is trivial today and annoying once there's application code to reformat.
 

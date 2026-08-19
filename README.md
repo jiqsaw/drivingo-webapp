@@ -7,7 +7,7 @@ The full spec — hard rules, auth design, sharing model, open decisions — liv
 ## Stack
 
 - **Vite + React 19 + TypeScript** — `react`, `@types/react`, `typescript` and `@biomejs/biome` versions match `../drivingo-app` exactly (Expo-constrained; the app repo is the source of truth — see `CLAUDE.md`)
-- **React Router 8** — data mode
+- **React Router 7** — data mode (v8 blocked by its `react >=19.2.7` peer floor vs the Expo-pinned react — see `CLAUDE.md`)
 - **Tailwind 4** via `@tailwindcss/postcss`
 - **Firebase JS SDK** — auth, Firestore, callables pinned to `europe-west2`
 - **TanStack Query** for server state
