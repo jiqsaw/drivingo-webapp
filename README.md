@@ -6,12 +6,12 @@ The full spec — hard rules, auth design, sharing model, open decisions — liv
 
 ## Stack
 
-- **Vite + React 19 + TypeScript** (exact versions pinned in `package.json`)
-- **React Router v7** — data mode
+- **Vite + React 19 + TypeScript** — `react`, `@types/react`, `typescript` and `@biomejs/biome` versions match `../drivingo-app` exactly (Expo-constrained; the app repo is the source of truth — see `CLAUDE.md`)
+- **React Router 8** — data mode
 - **Tailwind 4** via `@tailwindcss/postcss`
 - **Firebase JS SDK** — auth, Firestore, callables pinned to `europe-west2`
 - **TanStack Query** for server state
-- **ESLint 9** flat config + `typescript@5`
+- **Biome** for lint + format (`npm run lint`, `npm run lint:fix`, `npm run format`) — config copied from `drivingo-app/biome.json`
 
 ## Getting started
 
@@ -21,7 +21,7 @@ cp .env.example .env   # fill in the Firebase web app config
 npm run dev
 ```
 
-`npm run build` type-checks then builds to `dist/`; `npm run lint` runs ESLint.
+`npm run build` type-checks then builds to `dist/`; `npm run typecheck` and `npm run lint` (Biome) run standalone.
 
 ## Hosting (not wired yet)
 

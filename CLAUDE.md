@@ -40,16 +40,37 @@ The split is cheap because the backend is already client-agnostic: coach logic i
 | Layer | Choice |
 |---|---|
 | Build | Vite + React 19 + TypeScript |
-| Routing | React Router v7 (data mode) — mature and boring; not TanStack Router |
+| Routing | **React Router 8** (data mode) — mature and boring; not TanStack Router. Neither sibling uses it, so the major is a free choice: start on the current one |
 | Styling | Tailwind 4 via `@tailwindcss/postcss` — same setup as `drivingo-website`, bundler-agnostic, config copies across |
 | Backend access | **Firebase JS SDK** — auth, firestore, functions. Never `@react-native-firebase` |
 | Region | Callables pinned to **`europe-west2`** — set it explicitly or every call 404s |
 | Server state | TanStack Query suggested (not mandated). **No Redux** — see hard rule 6 |
 | Payments | RevenueCat Web Billing (`@revenuecat/purchases-js`) / Stripe — wire at monetization, not at scaffold |
-| Lint/TS | Match `drivingo-website` (ESLint 9 + `typescript@5`), not the app's Biome config |
+| Lint/format | **Biome** — same config as `drivingo-app`. Not ESLint |
+| React · TypeScript · Biome | **Exact versions come from `../drivingo-app/CLAUDE.md` → "Toolchain versions".** Do not pin here |
 | Hosting | Firebase Hosting, static build, SPA catch-all rewrite `**` → `/index.html` |
 
-No server tier at any point: the client holds no secrets, the callables do. Pin exact versions at scaffold.
+No server tier at any point: the client holds no secrets, the callables do.
+
+### Tooling aligns with `drivingo-app`, not `drivingo-website` (decided 2026-08-19)
+
+The webapp and the native app are **one product on two platforms** — same domain vocabulary, feature names, component names and backend contracts. Code and concepts move between them, so identical formatting and file naming keeps diffs readable and makes a file copy-and-adjust rather than copy-and-reformat. The website shares almost no vocabulary with either client and stays **deliberately independent** (Next 16 + `eslint-config-next` + TS 5) — its lint config is Next-specific and inapplicable to a Vite SPA regardless.
+
+Note this supersedes an earlier "match the website" line. That reasoning leaned on the Tailwind config transferring, which is true but irrelevant: Tailwind 4 is PostCSS/CSS-based and independent of the linter.
+
+Copy `drivingo-app/biome.json` and adjust only the `files.includes` ignores (drop `ios`/`android`/`.expo`, keep `dist`). The settings that must match:
+
+- 4-space indent, **120** line width, LF endings
+- single quotes in JS/TS, **double** quotes in JSX, semicolons always, trailing commas `all`
+- `organizeImports` assist on, `recommended` lint preset
+- **kebab-case filenames**
+- `@`-prefixed path aliases in `tsconfig.json` (the app uses `@ui/*`, `@features/*`, `@theme/*`, `@global/*` — mirror the convention, not the exact list)
+
+**Only four packages are shared** between the two repos: `react`, `@types/react`, `typescript`, `@biomejs/biome`. Everything else is platform-specific and independently versioned — `expo`/`react-native` exist only in the app, `vite`/`react-router`/`tailwind`/`firebase` only here, and the two use different Firebase packages entirely.
+
+For those four, **`drivingo-app` is the source of truth** and its `CLAUDE.md` holds the canonical table. The app governs because **Expo SDK constrains React and React Native** — the webapp must never force a version Expo doesn't support. Upgrading any of the four is an app-and-webapp-together decision, driven by what the Expo SDK allows. React Router is exempt: no sibling uses it, so take the current major.
+
+⚠️ If the scaffolding thread already installed ESLint + TS 5 from the previous version of this file, switch it now. Redoing lint setup is trivial today and annoying once there's application code to reformat.
 
 ---
 
