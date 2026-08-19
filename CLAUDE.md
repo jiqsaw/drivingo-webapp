@@ -12,7 +12,7 @@ Not to be confused with its two siblings:
 | **`drivingo-webapp`** (here) | `app.drivingo.co.uk` | **authed, behind login, no public surface** |
 | `drivingo-app` | iOS / Android | Expo React Native, bundle `app.drivingo` |
 
-**Status: not scaffolded — this file is the only thing in the repo.** No framework chosen yet, no code, not a git repo. The architecture decision behind it is logged in `../ROADMAP.md`.
+**Status: scaffolded 2026-08-19** — Vite + React 19 + TS per the stack table below, pushed to `github.com/jiqsaw/drivingo-webapp`. Placeholder routes only; no auth, no features, no hosting config yet. The architecture decision behind it is logged in `../ROADMAP.md`.
 
 ## Why this is a separate app and not an Expo web export
 
